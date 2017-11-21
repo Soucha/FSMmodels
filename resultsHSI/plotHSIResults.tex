@@ -1,0 +1,199 @@
+\documentclass{article}
+\usepackage{pgfplots}
+\usepackage{pgfplotstable}
+\usepackage{booktabs}
+\usepackage{pgffor}
+\usepackage{calc}
+\usepgfplotslibrary{statistics}
+\usepgfplotslibrary{fillbetween}
+\usepackage[active,tightpage]{preview}
+\PreviewEnvironment{tabular}
+\setlength{\PreviewBorder}{4pt}
+\pgfplotsset{compat=newest}
+\begin{document}
+
+%\newcommand\FSMtype{DFA}
+%\newcommand\Inputs{5}
+\def\methods{2}
+\message{\FSMtype}
+%\message{\Inputs}
+
+\newcommand{\getColor}[1]{%
+\ifnum 0=#1 brown\fi
+\ifnum 1=#1 blue\fi
+%\ifnum 2=#1 yellow\fi
+%\ifnum 3=#1 blue\fi
+%\ifnum 4=#1 magenta\fi
+%\ifnum 5=#1 brown\fi
+%\ifnum 6=#1 lime\fi
+%\ifnum 7=#1 orange\fi
+%\ifnum 8=#1 purple\fi
+%\ifnum 9=#1 teal\fi
+%\ifnum 10=#1 violet\fi
+\ifnum 2=#1 green!50!black\fi
+}
+
+\pgfplotsset{
+	ymajorgrids,
+	width=12cm,
+	legend entries={
+		Shortest Separating Sequences,
+		State pairs' Separating Sequences from ST,
+		ST based Separating Sequences
+		},
+	legend cell align=left,
+	legend columns=-1,
+	legend to name=hsiLegend,
+	title={The number of \objective},
+	scaled y ticks=false,
+	x tick label style={/pgf/number format/.cd,1000 sep={\,},fixed},
+	y tick label style={/pgf/number format/.cd,1000 sep={\,},fixed}
+}
+
+\begin{tabular}{rl}
+\multicolumn{2}{c}{\FSMtype: 
+3- and 1- quartiles of values of 100 machines per the number of states on the x axis}\\[0.2cm]
+5 inputs \hfill & \hfil 10 inputs\\[0.3cm]
+\def\objective{Symbols}
+\begin{tikzpicture}[baseline]
+\pgfplotstableread[col sep=tab]{\FSMtype_p5_\objective.txt}\loadedtable
+\begin{axis}%[title={The total length of Test Suite (= Symbols)}]
+\foreach \n in {0,...,\methods}{
+  \edef\temp{\noexpand\addplot [\getColor{\n},name path=\n_1,smooth,forget plot] table[y=1_\n]\noexpand\loadedtable;
+  \noexpand\addplot [\getColor{\n},name path=\n_3,smooth,forget plot] table[y=3_\n]\noexpand\loadedtable;
+  \noexpand\addplot [\getColor{\n},fill opacity=0.15] fill between[of=\n_1  and \n_3];}
+  \temp
+} 
+\end{axis}
+\end{tikzpicture}
+&
+\begin{tikzpicture}[baseline]
+\def\objective{Symbols}
+\pgfplotstableread[col sep=tab]{\FSMtype_p10_\objective.txt}\loadedtable
+\begin{axis}[yticklabel pos=right]%,title={The number of Test Sequences (= Resets)}]
+\foreach \n in {0,...,\methods}{
+  \edef\temp{\noexpand\addplot [\getColor{\n},name path=\n_1,smooth,forget plot] table[y=1_\n]\noexpand\loadedtable;
+  \noexpand\addplot [\getColor{\n},name path=\n_3,smooth,forget plot] table[y=3_\n]\noexpand\loadedtable;
+  \noexpand\addplot [\getColor{\n},fill opacity=0.15] fill between[of=\n_1  and \n_3];}
+  \temp
+} 
+\end{axis}
+\end{tikzpicture}
+\\[0.5cm]
+\def\objective{Sequences}
+\begin{tikzpicture}[baseline]
+\pgfplotstableread[col sep=tab]{\FSMtype_p5_\objective.txt}\loadedtable
+\begin{axis}%[title={The total length of Test Suite (= Symbols)}]
+\foreach \n in {0,...,\methods}{
+  \edef\temp{\noexpand\addplot [\getColor{\n},name path=\n_1,smooth,forget plot] table[y=1_\n]\noexpand\loadedtable;
+  \noexpand\addplot [\getColor{\n},name path=\n_3,smooth,forget plot] table[y=3_\n]\noexpand\loadedtable;
+  \noexpand\addplot [\getColor{\n},fill opacity=0.15] fill between[of=\n_1  and \n_3];}
+  \temp
+} 
+\end{axis}
+\end{tikzpicture}
+&
+\begin{tikzpicture}[baseline]
+\def\objective{Sequences}
+\pgfplotstableread[col sep=tab]{\FSMtype_p10_\objective.txt}\loadedtable
+\begin{axis}[yticklabel pos=right]%,title={The number of Test Sequences (= Resets)}]
+\foreach \n in {0,...,\methods}{
+  \edef\temp{\noexpand\addplot [\getColor{\n},name path=\n_1,smooth,forget plot] table[y=1_\n]\noexpand\loadedtable;
+  \noexpand\addplot [\getColor{\n},name path=\n_3,smooth,forget plot] table[y=3_\n]\noexpand\loadedtable;
+  \noexpand\addplot [\getColor{\n},fill opacity=0.15] fill between[of=\n_1  and \n_3];}
+  \temp
+} 
+\end{axis}
+\end{tikzpicture}
+\\[0.5cm]
+\def\objective{Sequences}
+\begin{tikzpicture}[baseline]
+\pgfplotstableread[col sep=tab]{\FSMtype_p5_\objective.txt}\loadedtable
+\begin{axis}[title={The number of Sequences per state}]
+\foreach \n in {0,...,\methods}{
+  \edef\temp{\noexpand\addplot [\getColor{\n},name path=\n_1,smooth,forget plot] 
+  table[y expr=\noexpand\thisrow{1_\n}/\noexpand\thisrow{States}]\noexpand\loadedtable;
+  \noexpand\addplot [\getColor{\n},name path=\n_3,smooth,forget plot] 
+  table[y expr=\noexpand\thisrow{3_\n}/\noexpand\thisrow{States}]\noexpand\loadedtable;
+  \noexpand\addplot [\getColor{\n},fill opacity=0.15] fill between[of=\n_1  and \n_3];}
+  \temp
+} 
+\end{axis}
+\end{tikzpicture}
+&
+\begin{tikzpicture}[baseline]
+\def\objective{Sequences}
+\pgfplotstableread[col sep=tab]{\FSMtype_p10_\objective.txt}\loadedtable
+\begin{axis}[yticklabel pos=right,title={The number of Sequences per state}]
+\foreach \n in {0,...,\methods}{
+  \edef\temp{\noexpand\addplot [\getColor{\n},name path=\n_1,smooth,forget plot] 
+  table[y expr=\noexpand\thisrow{1_\n}/\noexpand\thisrow{States}]\noexpand\loadedtable;
+  \noexpand\addplot [\getColor{\n},name path=\n_3,smooth,forget plot] 
+  table[y expr=\noexpand\thisrow{3_\n}/\noexpand\thisrow{States}]\noexpand\loadedtable;
+  \noexpand\addplot [\getColor{\n},fill opacity=0.15] fill between[of=\n_1  and \n_3];}
+  \temp
+} 
+\end{axis}
+\end{tikzpicture}
+\\[0.5cm]
+\def\objective{Symbols}
+\begin{tikzpicture}[baseline]
+\pgfplotstableread[col sep=tab]{\FSMtype_p5_\objective.txt}\loadedtable
+\begin{axis}[title={The number of Symbols per average sequence}]
+\foreach \n in {0,...,\methods}{
+  \edef\temp{\noexpand\addplot [\getColor{\n},name path=\n_1,smooth,forget plot] 
+  table[y expr=\noexpand\thisrow{1_\n}/\noexpand\thisrow{SeqAvg_\n}]\noexpand\loadedtable;
+  \noexpand\addplot [\getColor{\n},name path=\n_3,smooth,forget plot] 
+  table[y expr=\noexpand\thisrow{3_\n}/\noexpand\thisrow{SeqAvg_\n}]\noexpand\loadedtable;
+  \noexpand\addplot [\getColor{\n},fill opacity=0.15] fill between[of=\n_1  and \n_3];}
+  \temp
+} 
+\end{axis}
+\end{tikzpicture}
+&
+\begin{tikzpicture}[baseline]
+\def\objective{Symbols}
+\pgfplotstableread[col sep=tab]{\FSMtype_p10_\objective.txt}\loadedtable
+\begin{axis}[yticklabel pos=right,title={The number of Symbols per average sequence}]
+\foreach \n in {0,...,\methods}{
+  \edef\temp{\noexpand\addplot [\getColor{\n},name path=\n_1,smooth,forget plot] 
+  table[y expr=\noexpand\thisrow{1_\n}/\noexpand\thisrow{SeqAvg_\n}]\noexpand\loadedtable;
+  \noexpand\addplot [\getColor{\n},name path=\n_3,smooth,forget plot] 
+  table[y expr=\noexpand\thisrow{3_\n}/\noexpand\thisrow{SeqAvg_\n}]\noexpand\loadedtable;
+  \noexpand\addplot [\getColor{\n},fill opacity=0.15] fill between[of=\n_1  and \n_3];}
+  \temp
+} 
+\end{axis}
+\end{tikzpicture}
+\\[0.5cm]
+\def\objective{Seconds}
+\begin{tikzpicture}[baseline]
+\pgfplotstableread[col sep=tab]{\FSMtype_p5_\objective.txt}\loadedtable
+\begin{axis}%[title={The total length of Test Suite (= Symbols)}]
+\foreach \n in {0,...,\methods}{
+  \edef\temp{\noexpand\addplot [\getColor{\n},name path=\n_1,smooth,forget plot] table[y=1_\n]\noexpand\loadedtable;
+  \noexpand\addplot [\getColor{\n},name path=\n_3,smooth,forget plot] table[y=3_\n]\noexpand\loadedtable;
+  \noexpand\addplot [\getColor{\n},fill opacity=0.15] fill between[of=\n_1  and \n_3];}
+  \temp
+} 
+\end{axis}
+\end{tikzpicture}
+&
+\begin{tikzpicture}[baseline]
+\def\objective{Seconds}
+\pgfplotstableread[col sep=tab]{\FSMtype_p10_\objective.txt}\loadedtable
+\begin{axis}[yticklabel pos=right]%,title={The number of Test Sequences (= Resets)}]
+\foreach \n in {0,...,\methods}{
+  \edef\temp{\noexpand\addplot [\getColor{\n},name path=\n_1,smooth,forget plot] table[y=1_\n]\noexpand\loadedtable;
+  \noexpand\addplot [\getColor{\n},name path=\n_3,smooth,forget plot] table[y=3_\n]\noexpand\loadedtable;
+  \noexpand\addplot [\getColor{\n},fill opacity=0.15] fill between[of=\n_1  and \n_3];}
+  \temp
+} 
+\end{axis}
+\end{tikzpicture}
+\\[0.5cm]
+\multicolumn{2}{c}{\pgfplotslegendfromname{hsiLegend}}
+\end{tabular}
+
+\end{document}
+
