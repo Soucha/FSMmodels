@@ -1,0 +1,177 @@
+\documentclass{article}
+\usepackage{pgfplots}
+\usepackage{pgfplotstable}
+\usepackage{booktabs}
+\usepackage{pgffor}
+\usepackage{calc}
+\usepgfplotslibrary{statistics}
+\usepgfplotslibrary{fillbetween}
+\usepackage[active,tightpage]{preview}
+\PreviewEnvironment{tabular}
+\setlength{\PreviewBorder}{4pt}
+\pgfplotsset{compat=newest}
+\begin{document}
+
+%\newcommand\FSMtype{DFSM}
+%\newcommand\Inputs{5}
+
+\message{\FSMtype}
+\message{\Inputs}
+\def\methods{20}
+
+\newcommand{\getColor}[1]{%
+\ifnum 0=#1 orange!90!black\fi
+\ifnum 1=#1 orange!80!black\fi
+\ifnum 2=#1 orange!70!black\fi
+\ifnum 3=#1 orange!60!black\fi
+\ifnum 4=#1 orange!50!black\fi
+\ifnum 5=#1 yellow!90!black\fi
+\ifnum 6=#1 yellow!80!black\fi
+\ifnum 7=#1 yellow!70!black\fi
+\ifnum 8=#1 pink!90!black\fi
+\ifnum 9=#1 pink!70!black\fi
+\ifnum 10=#1 cyan\fi
+\ifnum 11=#1 olive\fi
+\ifnum 12=#1 magenta!95!black\fi
+\ifnum 13=#1 magenta!75!black\fi
+\ifnum 14=#1 magenta!55!black\fi
+\ifnum 15=#1 blue!80!black\fi
+\ifnum 16=#1 blue!70!black\fi
+\ifnum 17=#1 blue!60!black\fi
+\ifnum 18=#1 green!80!black\fi
+\ifnum 19=#1 green!70!black\fi
+\ifnum 20=#1 green!60!black\fi
+}
+
+\pgfplotsset{
+	ymajorgrids,
+	width=12cm,
+	legend entries={
+		1: L* - AllPrefixes,
+		2: L* - AllSuffixesAfterLastState,
+		3: L* - Suffix1by1,
+		4: L* - SuffixAfterLastState,
+		5: L* - OneSuffix - binary search,
+		6: OP - AllGlobally,
+		7: OP - OneGlobally,
+		8: OP - OneLocally,
+		9: DT,
+		10: TTT,
+		11: Quotient,
+		12: GoodSplit - maxDistLen:2 + EQ,
+		13: H-learner ES=0 + EQ,
+		14: H-learner ES=1 + EQ,
+		15: H-learner ES=2 + EQ,		
+		16: SPY-learner ES=0 + EQ,
+		17: SPY-learner ES=1 + EQ,
+		18: SPY-learner ES=2 + EQ,
+		19: S-learner ES=0 + EQ,		
+		20: S-learner ES=1 + EQ,
+		21: S-learner ES=2 + EQ
+		},
+	legend cell align=left,
+	legend to name=learningLegend,
+	title={The number of \objective},
+	scaled y ticks=false,
+	y tick label style={/pgf/number format/.cd,1000 sep={\,},fixed}
+}
+
+\begin{tabular}{rl}
+\multicolumn{2}{c}{\FSMtype, \Inputs\ inputs: 
+3- and 1- quartiles of values of 100 machines per the number of states on the x axis}\\[0.3cm]
+\begin{tikzpicture}[baseline]
+\def\objective{OQs}
+\pgfplotstableread[col sep=tab]{\FSMtype_p\Inputs_\objective.txt}\loadedtable
+\begin{axis}[title={The number of Output Queries}]
+\foreach \n in {0,...,\methods}{
+  \edef\temp{\noexpand\addplot [\getColor{\n},name path=\n_1,smooth,forget plot] table[y=1_\n]\noexpand\loadedtable;
+  \noexpand\addplot [\getColor{\n},name path=\n_3,smooth,forget plot] table[y=3_\n]\noexpand\loadedtable;
+  \noexpand\addplot [\getColor{\n},fill opacity=0.15] fill between[of=\n_1  and \n_3];}
+  \temp
+} 
+\end{axis}
+\end{tikzpicture}
+&
+\begin{tikzpicture}[baseline]
+\def\objective{EQs}
+\pgfplotstableread[col sep=tab]{\FSMtype_p\Inputs_\objective.txt}\loadedtable
+\begin{axis}[yticklabel pos=right,title={The number of Equivalence Queries}]
+\foreach \n in {0,...,\methods}{
+  \edef\temp{\noexpand\addplot [\getColor{\n},name path=\n_1,smooth,forget plot] table[y=1_\n]\noexpand\loadedtable;
+  \noexpand\addplot [\getColor{\n},name path=\n_3,smooth,forget plot] table[y=3_\n]\noexpand\loadedtable;
+  \noexpand\addplot [\getColor{\n},fill opacity=0.15] fill between[of=\n_1  and \n_3];}
+  \temp
+} 
+\end{axis}
+\end{tikzpicture}
+\\[0.5cm]
+\begin{tikzpicture}[baseline]
+\def\objective{symbols}
+\pgfplotstableread[col sep=tab]{\FSMtype_p\Inputs_\objective.txt}\loadedtable
+\begin{axis}[title={The total length of queried sequences (= Symbols)}]
+\foreach \n in {0,...,\methods}{
+  \edef\temp{\noexpand\addplot [\getColor{\n},name path=\n_1,smooth,forget plot] table[y=1_\n]\noexpand\loadedtable;
+  \noexpand\addplot [\getColor{\n},name path=\n_3,smooth,forget plot] table[y=3_\n]\noexpand\loadedtable;
+  \noexpand\addplot [\getColor{\n},fill opacity=0.15] fill between[of=\n_1  and \n_3];}
+  \temp
+} 
+\end{axis}
+\end{tikzpicture}
+&
+\begin{tikzpicture}[baseline]
+\def\objective{Resets}
+\pgfplotstableread[col sep=tab]{\FSMtype_p\Inputs_\objective.txt}\loadedtable
+\begin{axis}[yticklabel pos=right,title={The number of Resets}]
+\foreach \n in {0,...,\methods}{
+  \edef\temp{\noexpand\addplot [\getColor{\n},name path=\n_1,smooth,forget plot] table[y=1_\n]\noexpand\loadedtable;
+  \noexpand\addplot [\getColor{\n},name path=\n_3,smooth,forget plot] table[y=3_\n]\noexpand\loadedtable;
+  \noexpand\addplot [\getColor{\n},fill opacity=0.15] fill between[of=\n_1  and \n_3];}
+  \temp
+} 
+\end{axis}
+\end{tikzpicture}
+\\[0.5cm]
+\begin{tikzpicture}[baseline]
+\def\objective{Exploration}
+\pgfplotstableread[col sep=tab]{\FSMtype_p\Inputs_\objective.txt}\loadedtable
+\begin{axis}[title={The Size of Observation Tree}]
+\foreach \n in {0,...,\methods}{
+  \edef\temp{\noexpand\addplot [\getColor{\n},name path=\n_1,smooth,forget plot] table[y=1_\n]\noexpand\loadedtable;
+  \noexpand\addplot [\getColor{\n},name path=\n_3,smooth,forget plot] table[y=3_\n]\noexpand\loadedtable;
+  \noexpand\addplot [\getColor{\n},fill opacity=0.15] fill between[of=\n_1  and \n_3];}
+  \temp
+} 
+\end{axis}
+\end{tikzpicture}
+&
+\begin{tikzpicture}[baseline]
+\def\objective{EE}
+\pgfplotstableread[col sep=tab]{\FSMtype_p\Inputs_\objective.txt}\loadedtable
+\begin{axis}[yticklabel pos=right,title={Exploration Efficiency (= Size/Symbols)}]
+\foreach \n in {0,...,\methods}{
+  \edef\temp{\noexpand\addplot [\getColor{\n},name path=\n_1,smooth,forget plot] table[y=1_\n]\noexpand\loadedtable;
+  \noexpand\addplot [\getColor{\n},name path=\n_3,smooth,forget plot] table[y=3_\n]\noexpand\loadedtable;
+  \noexpand\addplot [\getColor{\n},fill opacity=0.15] fill between[of=\n_1  and \n_3];}
+  \temp
+} 
+\end{axis}
+\end{tikzpicture}
+\\[0.5cm]
+\begin{tikzpicture}[baseline]
+\def\objective{seconds}
+\pgfplotstableread[col sep=tab]{\FSMtype_p\Inputs_\objective.txt}\loadedtable
+\begin{axis}
+\foreach \n in {0,...,\methods}{
+  \edef\temp{\noexpand\addplot [\getColor{\n},name path=\n_1,smooth,forget plot] table[y=1_\n]\noexpand\loadedtable;
+  \noexpand\addplot [\getColor{\n},name path=\n_3,smooth,forget plot] table[y=3_\n]\noexpand\loadedtable;
+  \noexpand\addplot [\getColor{\n},fill opacity=0.15] fill between[of=\n_1  and \n_3];}
+  \temp
+} 
+\end{axis}
+\end{tikzpicture}
+&
+\pgfplotslegendfromname{learningLegend}
+\end{tabular}
+
+\end{document}
+
