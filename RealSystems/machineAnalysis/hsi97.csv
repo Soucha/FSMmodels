@@ -1,0 +1,4 @@
+FSMtype	States	Inputs	Outputs	Sequences	Symbols	Seconds	Algorithm	AlgId	fileName
+4	97	12	2	760	1601	0.002106	ShortestSeparatingSequences	0	DFA_R97_sched4.fsm
+4	97	12	2	672	1425	0.004433	SeparatingSequencesFromSplittingTree	1	DFA_R97_sched4.fsm
+4	97	12	2	537	1589	0.009569	SplittingTreeBased	2	DFA_R97_sched4.fsm

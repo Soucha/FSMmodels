@@ -1,0 +1,4 @@
+FSMtype	States	Inputs	Outputs	Sequences	Symbols	Seconds	Algorithm	AlgId	fileName
+4	664	32	2	11894	27787	0.120105	ShortestSeparatingSequences	0	DFA_R664_pots2.fsm
+4	664	32	2	8709	28045	0.302967	SeparatingSequencesFromSplittingTree	1	DFA_R664_pots2.fsm
+4	664	32	2	7703	28130	0.764962	SplittingTreeBased	2	DFA_R664_pots2.fsm

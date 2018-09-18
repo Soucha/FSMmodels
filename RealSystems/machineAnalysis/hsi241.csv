@@ -1,0 +1,4 @@
+FSMtype	States	Inputs	Outputs	Sequences	Symbols	Seconds	Algorithm	AlgId	fileName
+4	241	15	2	2176	4609	0.012221	ShortestSeparatingSequences	0	DFA_R241_sched5.fsm
+4	241	15	2	2080	4417	0.025271	SeparatingSequencesFromSplittingTree	1	DFA_R241_sched5.fsm
+4	241	15	2	1649	4883	0.056303	SplittingTreeBased	2	DFA_R241_sched5.fsm

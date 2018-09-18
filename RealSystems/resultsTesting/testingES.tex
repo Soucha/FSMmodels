@@ -1,0 +1,118 @@
+\documentclass{article}
+\usepackage{pgfplots}
+\usepackage{pgfplotstable}
+\usepackage{booktabs}
+\usepackage{pgffor}
+\usepackage{calc}
+\usepgfplotslibrary{statistics}
+\usepgfplotslibrary{fillbetween}
+\usepackage[active,tightpage]{preview}
+\PreviewEnvironment{tabular}
+\setlength{\PreviewBorder}{4pt}
+\pgfplotsset{compat=newest}
+\begin{document}
+
+\newcommand\FN{DFA_R50_peterson2}
+
+\message{\FN}
+
+\newcommand{\getColor}[1]{%
+\ifnum 0=#1 yellow!85!black\fi
+\ifnum 1=#1 teal\fi
+\ifnum 2=#1 brown\fi
+\ifnum 3=#1 purple\fi
+\ifnum 4=#1 lime!80!black\fi
+\ifnum 5=#1 orange\fi
+\ifnum 6=#1 cyan\fi
+\ifnum 7=#1 blue\fi
+\ifnum 8=#1 olive\fi
+\ifnum 9=#1 magenta\fi
+\ifnum 10=#1 violet\fi
+\ifnum 11=#1 green!50!black\fi
+\ifnum 12=#1 red\fi
+\ifnum 13=#1blue\fi
+\ifnum 14=#1magenta\fi
+\ifnum 15=#1orange\fi
+\ifnum 16=#1orange\fi
+\ifnum 17=#1orange\fi
+\ifnum 18=#1orange\fi
+\ifnum 19=#1orange\fi
+\ifnum 20=#1green\fi
+}
+
+\pgfplotsset{
+	ymajorgrids,
+	width=65mm,
+	xtick={0,1,2},
+	legend entries={
+		%SVS,
+		W,
+		W/ST,
+		Wp,
+		Wp/ST,
+		HSI,
+		HSI/ST,
+		H,
+		SPY,
+		SPY/ST,
+		SPYH,
+		S
+		},
+	legend cell align=left,
+	legend to name=testingLegend,
+	legend columns=6,
+	title={The number of \objective},
+	scaled y ticks=false,
+	y tick label style={/pgf/number format/.cd,1000 sep={\,},fixed}
+}
+\pgfplotstableread[col sep=tab]{testing\FN_ES.txt}\loadedtable
+
+\begin{tabular}{rl}
+\begin{tikzpicture}[baseline]
+\def\objective{Symbols}
+%\begin{axis}
+\begin{semilogyaxis}[title={Total number of symbols},%ytick={0,100000,200000,300000,400000,500000},
+height=7cm]
+\foreach \n in {0,...,10}{
+  \edef\temp{\noexpand\addplot [\getColor{\n},smooth] table[y=\n_\objective]\noexpand\loadedtable;}  \temp
+} 
+\end{semilogyaxis}
+%\end{axis}
+\end{tikzpicture}
+&
+\begin{tikzpicture}[baseline]
+\def\objective{Resets}
+%\begin{axis}
+\begin{semilogyaxis}[yticklabel pos=right,title={Number of test sequences},
+%ytick={0,10000,20000,30000,40000,50000,60000},
+height=7cm]
+\foreach \n in {0,...,10}{
+  \edef\temp{\noexpand\addplot [\getColor{\n},smooth] table[y=\n_\objective]\noexpand\loadedtable;}  \temp
+} 
+\end{semilogyaxis}
+%\end{axis}
+\end{tikzpicture}
+\\[0.8cm]
+\multicolumn{2}{c}{\pgfplotslegendfromname{testingLegend}}
+\\[0.3cm]
+\begin{tikzpicture}[baseline]
+\def\objective{Exploration}
+\begin{axis}[title={Exploration efficiency},ymin=0,ymax=0.3]
+\foreach \n in {0,...,10}{
+  \edef\temp{\noexpand\addplot [\getColor{\n},smooth] table[y=\n_\objective]\noexpand\loadedtable;}  \temp
+} 
+\end{axis}
+\end{tikzpicture}
+&
+\begin{tikzpicture}[baseline]
+\def\objective{seconds}
+\begin{axis}[yticklabel pos=right,title={Running time in seconds}]
+\foreach \n in {0,...,10}{
+  \edef\temp{\noexpand\addplot [\getColor{\n}] table[y=\n_\objective]\noexpand\loadedtable;}  \temp
+} 
+\end{axis}
+\end{tikzpicture}
+\end{tabular}
+
+\end{document}
+

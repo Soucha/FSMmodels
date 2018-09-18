@@ -1,0 +1,4 @@
+FSMtype	States	Inputs	Outputs	Sequences	Symbols	Seconds	Algorithm	AlgId	fileName
+4	50	18	2	439	881	0.000624	ShortestSeparatingSequences	0	DFA_R50_peterson2.fsm
+4	50	18	2	301	865	0.001631	SeparatingSequencesFromSplittingTree	1	DFA_R50_peterson2.fsm
+4	50	18	2	268	914	0.003334	SplittingTreeBased	2	DFA_R50_peterson2.fsm

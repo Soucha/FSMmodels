@@ -1,0 +1,2 @@
+Correct	FSMtype	States	Inputs	Outputs	Resets	OQs	EQs	symbols	Exploration	EE	BBresets	BBsymbols	seconds	Algorithm	CEprocessing	AlgId	Teacher	BB	fileName
+1	4	1328	57	2	170348	227244	450	2416643	227243	0.094033	0	0	75465.267767	Hlearner	ExtraStates:0+EQ	12	TeacherDFSM		DFA_R1328_peterson3.fsm

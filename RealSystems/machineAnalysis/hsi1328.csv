@@ -1,0 +1,4 @@
+FSMtype	States	Inputs	Outputs	Sequences	Symbols	Seconds	Algorithm	AlgId	fileName
+4	1328	57	2	29121	59987	0.462519	ShortestSeparatingSequences	0	DFA_R1328_peterson3.fsm
+4	1328	57	2	16330	45747	0.527919	SeparatingSequencesFromSplittingTree	1	DFA_R1328_peterson3.fsm
+4	1328	57	2	14332	48310	2.576644	SplittingTreeBased	2	DFA_R1328_peterson3.fsm

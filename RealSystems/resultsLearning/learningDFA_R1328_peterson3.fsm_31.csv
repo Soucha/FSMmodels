@@ -1,0 +1,6 @@
+Correct	FSMtype	States	Inputs	Outputs	Resets	OQs	EQs	symbols	Exploration	EE	BBresets	BBsymbols	seconds	Algorithm	CEprocessing	AlgId	Teacher	BB	fileName
+1	4	1328	57	2	10371610	10371610	95	177695403	18740142	0.105462	0	0	1180.505626	L*	addAllPrefixesToS	0	TeacherDFSM		DFA_R1328_peterson3.fsm
+1	4	1328	57	2	18848630	18848630	78	348544281	57860409	0.166006	0	0	1039.512566	L*	addAllSuffixesAfterLastStateToE	1	TeacherDFSM		DFA_R1328_peterson3.fsm
+1	4	1328	57	2	8856657	8856657	88	144765190	15024034	0.103782	0	0	1232.015831	L*	addSuffix1by1ToE	2	TeacherDFSM		DFA_R1328_peterson3.fsm
+1	4	1328	57	2	8705508	8705508	96	142288561	15024307	0.105590	0	0	1127.654290	L*	addSuffixAfterLastStateToE	3	TeacherDFSM		DFA_R1328_peterson3.fsm
+1	4	1328	57	2	8705584	8705584	96	142288738	15024140	0.105589	0	0	933.924719	L*	addSuffixToE_binarySearch	4	TeacherDFSM		DFA_R1328_peterson3.fsm
